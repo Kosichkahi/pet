@@ -180,6 +180,17 @@ testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xm
 
 [[package]]
 category = "main"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+name = "python-dotenv"
+optional = false
+python-versions = ">=3.7"
+version = "0.21.0"
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
+category = "main"
 description = "Sniff out which async library your code is running under"
 name = "sniffio"
 optional = false
@@ -236,7 +247,7 @@ python-versions = "*"
 version = "0.2.5"
 
 [metadata]
-content-hash = "61f11cd8ab0e1121d9265bbc790a1f990231b8f871a9e1a90856fec317f24848"
+content-hash = "622a9044017cf7c86cddb1063a74d26630fb7808256d58760f672b5ec84eea31"
 python-versions = "3.8.1"
 
 [metadata.files]
@@ -255,6 +266,7 @@ py = []
 pydantic = []
 pyparsing = []
 pytest = []
+python-dotenv = []
 sniffio = []
 starlette = []
 typing-extensions = []
