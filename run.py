@@ -1,12 +1,12 @@
-from fastapi import FastAPI
+import uvicorn
 
-from app.routers.default.handlers.classes import router as classes_router
+from app.app import get_application
+from config.config import app_config
+from database.database import get_database
 
-
-def get_application() -> FastAPI:
-    app = FastAPI()
-    app.include_router(router=classes_router)
-    return app
-
-
-app = get_application()
+if __name__ == '__main__':
+    database = get_database()
+    uvicorn.run(
+        app=get_application(on_startup=[database.connect], on_shutdown=[database.disconnect]),
+        debug=app_config.DEBUG
+    )
