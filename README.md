@@ -26,3 +26,4 @@ python run.py
 ## Future plans
 - add linters: _flake_
 - package the project using _docker_
+- add parameters to the startup command to run the application from the same script at any time (the first and the rest)
