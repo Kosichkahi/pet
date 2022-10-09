@@ -1,10 +1,7 @@
-from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, List
-from uuid import UUID
 
-from fastapi import Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Faculty(Enum):
@@ -22,24 +19,23 @@ class Person(BaseModel):
     last_name: str
 
 
-@dataclass
-class StudentQueryParams:
-    first_name: Optional[str] = Query(default=None)
-    last_name: Optional[str] = Query(default=None)
-    specialization_ids: Optional[List[str]] = Query(default=list)
+class StudentQueryParams(BaseModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
+    specialization_ids: Optional[List[int]] = Field(default_factory=list)
 
 
 class CreateStudentInfo(Person):
-    faculty_id: UUID
-    specialization_id: UUID
+    faculty_id: int
+    specialization_id: int
     group_number: int
 
 
 class UpdateStudentInfo(Person):
     first_name: Optional[str]
     last_name: Optional[str]
-    faculty_id: Optional[UUID]
-    specialization_id: Optional[UUID]
+    faculty_id: Optional[int]
+    specialization_id: Optional[int]
     group_number: Optional[int]
 
 
@@ -57,7 +53,7 @@ class SpecializationInfoIn(BaseModel):
 
 
 class CreationResponse(BaseModel):
-    id: UUID
+    id: int
 
 
 class MessageResponse(BaseModel):

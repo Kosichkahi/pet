@@ -1,7 +1,6 @@
-from typing import List
-from uuid import UUID
+from typing import List, Optional, Union
 
-from fastapi import APIRouter, Path, HTTPException, Depends
+from fastapi import APIRouter, Path, HTTPException, Depends, Query
 from starlette import status
 
 from app.routers.default import models
@@ -12,9 +11,18 @@ router = APIRouter(prefix='/students')
 
 @router.get('', response_model=List[models.StudentInfo])
 async def get_students(
-        query_params: models.StudentQueryParams = Depends(models.StudentQueryParams)
+    first_name: Optional[str] = Query(default=None),
+    last_name: Optional[str] = Query(default=None),
+    specialization_ids: Optional[List[int]] = Query(default=None)
 ) -> List[models.StudentInfo]:
-    student_objs = await filter_students(query_params=query_params)
+    student_objs = await filter_students(
+        query_params=models.StudentQueryParams(
+            first_name=first_name,
+            last_name=last_name,
+            specialization_ids=specialization_ids
+        )
+    )
+
     return [
         models.StudentInfo(
             first_name=student.first_name,
@@ -35,7 +43,7 @@ async def create_student(payload: models.CreateStudentInfo) -> models.CreationRe
         last_name=payload.last_name,
         faculty=faculty_obj,
         specialization=specialization_obj,
-        number=payload.group_number
+        group_number=payload.group_number
     )
     return models.CreationResponse(id=student_obj.id)
 
@@ -43,21 +51,22 @@ async def create_student(payload: models.CreateStudentInfo) -> models.CreationRe
 @router.put('/{studentId}', response_model=models.MessageResponse)
 async def update_student(
         payload: models.UpdateStudentInfo,
-        student_id: UUID = Path(..., alias='studentId')
+        student_id: int = Path(..., alias='studentId')
 ) -> models.MessageResponse:
     student_obj = await get_student_by_id(student_id=student_id)
-    await student_obj.update_from_dict(data=payload.dict())
+    await student_obj.update_from_dict(data=payload.dict(exclude_none=True))
+    await student_obj.save()
     return models.MessageResponse()
 
 
 @router.delete('/{studentId}', response_model=models.MessageResponse)
-async def delete_student(student_id: str = Path(..., alias='studentId')) -> models.MessageResponse:
+async def delete_student(student_id: int = Path(..., alias='studentId')) -> models.MessageResponse:
     student_obj = await get_student_by_id(student_id=student_id)
     await student_obj.delete()
     return models.MessageResponse()
 
 
-async def get_faculty_by_id(faculty_id: UUID) -> db_models.Faculty:
+async def get_faculty_by_id(faculty_id: int) -> db_models.Faculty:
     faculty_obj = await db_models.Faculty.get_or_none(id=faculty_id)
     if faculty_obj is None:
         raise HTTPException(
@@ -67,7 +76,7 @@ async def get_faculty_by_id(faculty_id: UUID) -> db_models.Faculty:
     return faculty_obj
 
 
-async def get_specialization_by_id(specialization_id: UUID) -> db_models.Specialization:
+async def get_specialization_by_id(specialization_id: int) -> db_models.Specialization:
     specialization_obj = await db_models.Specialization.get_or_none(id=specialization_id)
     if specialization_obj is None:
         raise HTTPException(
@@ -77,7 +86,7 @@ async def get_specialization_by_id(specialization_id: UUID) -> db_models.Special
     return specialization_obj
 
 
-async def get_student_by_id(student_id: UUID) -> db_models.Student:
+async def get_student_by_id(student_id: int) -> db_models.Student:
     student_obj = await db_models.Student.get_or_none(id=student_id)
     if student_obj is None:
         raise HTTPException(
