@@ -6,14 +6,14 @@ from app.routers.default import models
 
 class Faculty(Model):
     id = UUIDField(pk=True)
-    name = CharEnumField(enum_type=models.Faculty, max_length=255)
+    name = CharEnumField(enum_type=models.Faculty, max_length=255, unique=True)
     created_at = DatetimeField(auto_now_add=True)
     updated_at = DatetimeField(auto_now=True)
 
 
 class Specialization(Model):
     id = UUIDField(pk=True)
-    name = CharField(max_length=128)
+    name = CharField(max_length=128, unique=True)
     created_at = DatetimeField(auto_now_add=True)
     updated_at = DatetimeField(auto_now=True)
 
@@ -24,7 +24,7 @@ class Student(Model):
     last_name = CharField(max_length=128)
     faculty = ForeignKeyField('models.Faculty', related_name='student', on_delete=CASCADE)
     specialization = ForeignKeyField('models.Specialization', related_name='student', on_delete=CASCADE)
-    number = IntField()
+    group_number = IntField()
     created_at = DatetimeField(auto_now_add=True)
     updated_at = DatetimeField(auto_now=True)
 
