@@ -2,6 +2,11 @@
 
 a toy example to demonstrate my coding style
 ___
+## Project navigation
+- [Handlers](https://github.com/Kosichkahi/toy/tree/main/app/routers/default/handlers)
+- [Database models](https://github.com/Kosichkahi/toy/blob/main/database/models.py)
+- [Env settings](https://github.com/Kosichkahi/toy/tree/main/config)
+- [Dependencies](https://github.com/Kosichkahi/toy/blob/main/pyproject.toml)
 ## How to run my project
 **For the first time:**
 1. Install packages:
@@ -12,7 +17,7 @@ poetry install
 pip install tortoise-orm
 ```
 2. Start your empty database
-3. Copy ~/config/env_example to ~/config/.env and fill it with you db connection parameters
+3. Copy [~/config/env_example](https://github.com/Kosichkahi/toy/blob/main/config/env_example) to [~/config/.env](https://github.com/Kosichkahi/toy/tree/main/config) and fill it with you db connection parameters
 4. Fill db & run application:
 ```bash
 python fill_db_and_run.py
