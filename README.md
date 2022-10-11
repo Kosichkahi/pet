@@ -1,6 +1,6 @@
-# Toy
+# Pet-project
 
-a toy example to demonstrate my coding style
+a pet-project to demonstrate my coding style
 ___
 ## Project navigation
 - [Handlers](https://github.com/Kosichkahi/toy/tree/main/app/routers/default/handlers)
